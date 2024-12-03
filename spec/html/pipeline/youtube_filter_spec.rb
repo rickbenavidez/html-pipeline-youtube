@@ -45,6 +45,14 @@ describe HTML::Pipeline::YoutubeFilter do
         %(\n\n<div class="video youtube"><iframe width="420" height="315" src="//www.youtube.com/embed/Kg4aWWIsszw" frameborder="0" allowfullscreen></iframe></div>)
       )
     end
+
+    it "supports youtu.be URLs" do
+      source = 'https://youtu.be/pk2M9RsRM3w?si=Ubgo4eJ7eVS0g5dD'
+      expect(subject.to_html(source)).to eq(
+        %(\n\n<div class="video youtube"><iframe width="420" height="315" src="//www.youtube.com/embed/pk2M9RsRM3w" frameborder="0" allowfullscreen></iframe></div>)
+      )
+    end
+
   end
 
   context "With no options" do
