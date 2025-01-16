@@ -26,8 +26,14 @@ describe HTML::Pipeline::YoutubeFilter do
         %(<div>\n\n<div class="video youtube"><iframe width="420" height="315" src="//www.youtube.com/embed/Kg4aWWIsszw" frameborder="0" allowfullscreen></iframe></div></div>)
       )
     end
+
+    it "does affect links in a p" do
+      hyper_link = "<p>Test</p><p><br></p><p>https://www.youtube.com/watch?v=JVTbrK9JiAo</p>"
+      expect(subject.to_html(hyper_link)).to include('embed')
+    end
+
+    hyper_link = %(<br>https://www.youtube.com/watch?v=Kg4aWWIsszw)
     it "does affect links after a br" do
-      hyper_link = %(<br>https://www.youtube.com/watch?v=Kg4aWWIsszw)
 
       expect(subject.to_html(hyper_link)).to eq(
         %(<br>\n\n<div class="video youtube"><iframe width="420" height="315" src="//www.youtube.com/embed/Kg4aWWIsszw" frameborder="0" allowfullscreen></iframe></div>)
