@@ -1,5 +1,3 @@
-require 'debug'
-
 module HTML
   class Pipeline
     class YoutubeFilter < TextFilter
