@@ -1,7 +1,7 @@
 module HTML
   class Pipeline
     class YoutubeFilter < TextFilter
-      REGEX = /(?<=^|\s|<div>|<br>|<p>)https?:\/\/(?:www.)?(?:youtube\.com\/(?:embed\/|watch\?(?:feature=player_embedded&)?v=)|youtu\.be\/)([A-Za-z0-9_-]*)[&?\w=]*/.freeze
+      REGEX = /(?<=^|\s|<div>|<br>|<p>)https?:\/\/(?:www.)?(?:youtube\.com\/(?:embed\/|watch\?(?:feature=player_embedded&)?v=)|youtu\.be\/)([A-Za-z0-9_-]*)(?:\?([^"\s]*))?/.freeze
  
       def call
         # This filter converts youtube video's url into youtube iframe.
@@ -15,6 +15,10 @@ module HTML
         #   :video_hide_related - boolean, whether shows related videos
         @text.gsub(REGEX) do
           youtube_id = $1
+
+          params = []
+          params << $2 if $2
+
           width = context[:video_width] || 420
           height = context[:video_height] || 315
           frameborder = context[:video_frameborder] || 0
@@ -22,7 +26,6 @@ module HTML
           autoplay = context[:video_autoplay] || false
           hide_related = context[:video_hide_related] || false
           src = "//www.youtube.com/embed/#{youtube_id}"
-          params = []
           params << "wmode=#{wmode}" if wmode
           params << "autoplay=1" if autoplay
           params << "rel=0" if hide_related

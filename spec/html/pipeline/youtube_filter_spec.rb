@@ -55,7 +55,7 @@ describe HTML::Pipeline::YoutubeFilter do
     it "supports youtu.be URLs" do
       source = 'https://youtu.be/pk2M9RsRM3w?si=Ubgo4eJ7eVS0g5dD'
       expect(subject.to_html(source)).to eq(
-        %(\n\n<div class="video youtube"><iframe width="420" height="315" src="//www.youtube.com/embed/pk2M9RsRM3w" frameborder="0" allowfullscreen></iframe></div>)
+        %(\n\n<div class="video youtube"><iframe width="420" height="315" src="//www.youtube.com/embed/pk2M9RsRM3w?si=Ubgo4eJ7eVS0g5dD" frameborder="0" allowfullscreen></iframe></div>)
       )
     end
 
@@ -65,6 +65,15 @@ describe HTML::Pipeline::YoutubeFilter do
     it "generates iframe with default setting" do
       expect(subject.to_html(youtube_url)).to eq(
         %(\n\n<div class="video youtube"><iframe width="420" height="315" src="//www.youtube.com/embed/Kg4aWWIsszw" frameborder="0" allowfullscreen></iframe></div>)
+      )
+    end
+  end
+
+  context 'with params' do
+    it 'keeps the referenced url params when generating the final url' do
+      source = "https://youtu.be/YGoi9pYxnlY?si=yf_BteAf-aWEocwm&t=143"
+      expect(subject.to_html(source)).to eq(
+        %(\n\n<div class="video youtube"><iframe width="420" height="315" src="//www.youtube.com/embed/YGoi9pYxnlY?si=yf_BteAf-aWEocwm&t=143" frameborder="0" allowfullscreen></iframe></div>)
       )
     end
   end
